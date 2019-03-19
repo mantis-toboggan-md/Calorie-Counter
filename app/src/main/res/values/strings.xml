@@ -5,4 +5,5 @@
     <string name="title_notifications">Notifications</string>
     <string name="search">Search</string>
     <string name="enter_a_food">enter a food...</string>
+    <string name="view">View</string>
 </resources>
