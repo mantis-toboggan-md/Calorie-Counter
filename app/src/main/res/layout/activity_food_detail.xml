@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FoodDetail">
+
+    <TextView
+        android:id="@+id/text_dbno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_food_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text='"name"'
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_common_measure_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="typical serving size:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.028"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_food_name" />
+
+    <TextView
+        android:id="@+id/text_common_measure"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text='"serving size"'
+        app:layout_constraintStart_toEndOf="@+id/text_common_measure_label"
+        app:layout_constraintTop_toBottomOf="@+id/text_food_name" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="wrap_content"
+        android:layout_height="3dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_common_measure" />
+
+    <TextView
+        android:id="@+id/text_fat_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_weight="1"
+        android:text='"f"'
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_fat_label"
+        app:layout_constraintStart_toEndOf="@+id/text_fat_label" />
+
+    <TextView
+        android:id="@+id/text_p_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_weight="1"
+        android:text='"p"'
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_p_label"
+        app:layout_constraintStart_toEndOf="@+id/text_p_label" />
+
+    <TextView
+        android:id="@+id/text_kcal_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_weight="1"
+        android:text='"kCal"'
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_kcal_label"
+        app:layout_constraintStart_toEndOf="@+id/text_kcal_label" />
+
+    <TextView
+        android:id="@+id/text_carbs_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_weight="1"
+        android:text='"c"'
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_carb_label"
+        app:layout_constraintStart_toEndOf="@+id/text_carb_label" />
+
+    <TextView
+        android:id="@+id/text_p_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_weight="1"
+        android:text="protein:"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_kcal_value"
+        app:layout_constraintStart_toEndOf="@+id/text_kcal_value" />
+
+    <TextView
+        android:id="@+id/text_fat_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_weight="1"
+        android:text="fat:"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_carbs_value"
+        app:layout_constraintStart_toEndOf="@+id/text_carbs_value" />
+
+    <TextView
+        android:id="@+id/text_kcal_label"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:text="kCal:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_common_measure" />
+
+    <TextView
+        android:id="@+id/text_carb_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_weight="1"
+        android:text="carbs:"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_p_value"
+        app:layout_constraintStart_toEndOf="@+id/text_p_value" />
+
+</android.support.constraint.ConstraintLayout>

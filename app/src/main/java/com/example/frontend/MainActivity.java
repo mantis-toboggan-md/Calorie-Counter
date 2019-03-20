@@ -1,16 +1,19 @@
 package com.example.frontend;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private TextView mTextMessage;
     private TextView mSearchText;
-    private TextView usdaSearchRes;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -61,13 +64,33 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mSearchText = findViewById(R.id.input_food_search);
-        //usdaSearchRes = (TextView) findViewById(R.id.text_search_res);
+
+        mSearchText.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
+                    new apiResults().execute();
+                    return true;
+                }
+                return false;
+            }
+        });
 
     }
 
 
     public void searchUSDA(View view) {
         new apiResults().execute();
+    }
+
+    public void viewFoodDetail(View view) {
+        String ndbno = view.getTag().toString();
+        Intent intent = new Intent(this, FoodDetail.class);
+        Log.i("inspect", ndbno);
+        intent.putExtra("ndbno", ndbno);
+        startActivity(intent);
     }
 
     private class apiResults extends AsyncTask<Void, Void, String>{
@@ -125,9 +148,8 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e){
                 Log.i("json", e.toString() );
             }finally {
-                //usdaSearchRes.setText(foodRes.toString());
-
-
+                //remove focus from editText to get rid of keyboard
+                findViewById(R.id.container).requestFocus();
                 // Parent layout
                 LinearLayout parentLayout = (LinearLayout)findViewById(R.id.linear_food_res);
 
@@ -142,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                    try{
                         view = layoutInflater.inflate(R.layout.food_result, parentLayout, false );
                         LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.food_res_layout);
+                        view.findViewById(R.id.button_view_details).setTag(foodRes.getJSONObject(i).getString("ndbno")+foodRes.getJSONObject(i).getString("group").replaceAll(" ", "%20"));
                         TextView foodName = (TextView)view.findViewById(R.id.text_food_name);
                         TextView foodGroup = (TextView)view.findViewById(R.id.text_food_group);
                         foodName.setText(foodRes.getJSONObject(i).getString("name"));
