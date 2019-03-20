@@ -92,17 +92,21 @@ public class FoodDetail extends AppCompatActivity {
           TextView proteinEl = findViewById(R.id.text_p_value);
           TextView carbsEl = findViewById(R.id.text_carbs_value);
           TextView fatEl = findViewById(R.id.text_fat_value);
+          TextView envDataEl = findViewById(R.id.text_env_data);
           String foodName = null;
           String foodServing = null;
           String kCal = null;
           String protein = null;
           String carbs = null;
           String fat = null;
+          String env = null;
 
-            JSONObject foodObject = null;
+            JSONObject foodObjectAll = null;
             super.onPostExecute(s);
             try {
-                foodObject = (JSONObject) new JSONTokener(s).nextValue();
+                foodObjectAll = (JSONObject) new JSONTokener(s).nextValue();
+                JSONObject foodObject = foodObjectAll.getJSONObject("food");
+                JSONObject envObject = foodObjectAll.getJSONObject("env");
                 foodName = foodObject.getString("name");
                 foodServing = foodObject.getString("measure") + " (" + foodObject.getString("weight") + "g)";
                 kCal = foodObject.getJSONArray("nutrients").getJSONObject(0).getString("value");
@@ -110,6 +114,9 @@ public class FoodDetail extends AppCompatActivity {
                 carbs = foodObject.getJSONArray("nutrients").getJSONObject(2).getString("value") + "g";
                 fat = foodObject.getJSONArray("nutrients").getJSONObject(3).getString("value") + "g";
 
+                if(envObject.getString("land")!=null){
+                    env = envObject.toString();
+                }
             } catch (JSONException e){
                 Log.i("json", e.toString() );
             }finally {
@@ -119,6 +126,10 @@ public class FoodDetail extends AppCompatActivity {
                 proteinEl.setText(protein);
                 carbsEl.setText(carbs);
                 fatEl.setText(fat);
+                if(env != null){
+                    envDataEl.setText(env);
+                }
+
             }
         }
     }

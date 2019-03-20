@@ -6,4 +6,10 @@
     <string name="search">Search</string>
     <string name="enter_a_food">enter a food...</string>
     <string name="view">View</string>
+    <string name="search_food">Search Food</string>
+    <string name="history">History</string>
+    <string name="log_food">Log Food</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
