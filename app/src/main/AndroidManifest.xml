@@ -14,13 +14,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".SearchFood" />
+        <activity android:name=".ui.SearchFood" />
         <activity
-            android:name=".FoodDetail"
-            android:parentActivityName=".SearchFood"
+            android:name=".ui.FoodDetail"
+            android:parentActivityName=".ui.SearchFood"
             />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
