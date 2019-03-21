@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -92,14 +93,18 @@ public class FoodDetail extends AppCompatActivity {
           TextView proteinEl = findViewById(R.id.text_p_value);
           TextView carbsEl = findViewById(R.id.text_carbs_value);
           TextView fatEl = findViewById(R.id.text_fat_value);
-          TextView envDataEl = findViewById(R.id.text_env_data);
+          TextView ghgEl = findViewById(R.id.text_ghg_value);
+          TextView landEl = findViewById(R.id.text_land_value);
+          TextView waterEl = findViewById(R.id.text_water_value);
           String foodName = null;
           String foodServing = null;
           String kCal = null;
           String protein = null;
           String carbs = null;
           String fat = null;
-          String env = null;
+          String ghg = null;
+          String land = null;
+          String water = null;
 
             JSONObject foodObjectAll = null;
             super.onPostExecute(s);
@@ -115,7 +120,9 @@ public class FoodDetail extends AppCompatActivity {
                 fat = foodObject.getJSONArray("nutrients").getJSONObject(3).getString("value") + "g";
 
                 if(envObject.getString("land")!=null){
-                    env = envObject.toString();
+                    ghg = envObject.getString("ghg");
+                    land = envObject.getString("land");
+                    water = envObject.getString("water");
                 }
             } catch (JSONException e){
                 Log.i("json", e.toString() );
@@ -126,8 +133,10 @@ public class FoodDetail extends AppCompatActivity {
                 proteinEl.setText(protein);
                 carbsEl.setText(carbs);
                 fatEl.setText(fat);
-                if(env != null){
-                    envDataEl.setText(env);
+                if(ghg != null){
+                    ghgEl.setText(ghg);
+                    landEl.setText(land);
+                    waterEl.setText(water);
                 }
 
             }
