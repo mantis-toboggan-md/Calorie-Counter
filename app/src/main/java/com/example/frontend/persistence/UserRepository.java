@@ -38,4 +38,17 @@ public class UserRepository  {
             return null;
         }
     }
+
+    public void update(long goal) {new updateAsyncTask(mUserDao).execute(goal);}
+
+    private static class updateAsyncTask extends AsyncTask<Long, Void,Void> {
+        private UserDao mAsyncTaskDao;
+        updateAsyncTask(UserDao dao) {mAsyncTaskDao = dao; }
+
+        @Override
+        protected Void doInBackground(final Long... params) {
+            mAsyncTaskDao.updateUser(params[0]);
+            return null;
+        }
+    }
 }

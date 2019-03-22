@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_food_name"
+        android:layout_width="0dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Name"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_food_amt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="amount"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_food_name" />
+
+    <TextView
+        android:id="@+id/text_food_kCal"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:text="kCal"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/text_food_amt"
+        app:layout_constraintTop_toBottomOf="@+id/text_food_name" />
+
+    <TextView
+        android:id="@+id/text_food_p"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="protein"
+        app:layout_constraintTop_toBottomOf="@+id/text_food_name"
+        tools:layout_editor_absoluteX="207dp" />
+
+    <TextView
+        android:id="@+id/text_food_fat"
+        android:layout_width="0dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="fat "
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_food_p"
+        app:layout_constraintStart_toEndOf="@+id/text_food_p" />
+
+    <TextView
+        android:id="@+id/text_food_carbs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="carbs"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_food_fat"
+        app:layout_constraintStart_toEndOf="@+id/text_food_fat" />
+
+    <TextView
+        android:id="@+id/text_food_ghg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="ghg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.537"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_food_p" />
+
+    <TextView
+        android:id="@+id/text_food_land"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="land"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_food_ghg"
+        app:layout_constraintStart_toEndOf="@+id/text_food_ghg" />
+
+    <TextView
+        android:id="@+id/text_food_water"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="water"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_food_ghg"
+        app:layout_constraintStart_toEndOf="@+id/text_food_land" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_food_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        app:backgroundTint="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_food_name"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="395dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="2dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fab_food_remove" />
+</android.support.constraint.ConstraintLayout>

@@ -15,4 +15,7 @@ public interface UserDao{
 
     @Query("SELECT * FROM user_profile_table LIMIT 1")
     LiveData<User> getUser();
+
+    @Query("UPDATE user_profile_table SET mGoal = :goal")
+    void updateUser(long goal);
 }
