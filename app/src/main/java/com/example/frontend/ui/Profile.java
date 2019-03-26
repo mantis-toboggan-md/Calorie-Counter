@@ -16,6 +16,10 @@ import com.example.frontend.R;
 import com.example.frontend.persistence.User;
 import com.example.frontend.persistence.UserViewModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+
 public class Profile extends AppCompatActivity {
 
     private UserViewModel mUserViewModel;
@@ -32,7 +36,10 @@ public class Profile extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mUserViewModel.update(Long.parseLong(mGoalCal.getText().toString()));
+                SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+                Integer dateSet = Integer.valueOf(df.format(Calendar.getInstance().getTime()));
+                long mGoal = Long.parseLong(mGoalCal.getText().toString());
+                mUserViewModel.insert(new User(mGoal, dateSet));
                 finish();
 
             }
@@ -40,10 +47,10 @@ public class Profile extends AppCompatActivity {
 
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
 
-        mUserViewModel.getUser().observe(this, new Observer<User>(){
+        mUserViewModel.getUser().observe(this, new Observer<List<User>>(){
             @Override
-            public void onChanged(@Nullable final User user){
-                mGoalCal.setText(String.valueOf(user.getGoal()));
+            public void onChanged(@Nullable final List<User> userList){
+                mGoalCal.setText(String.valueOf(userList.get(userList.size()-1).getGoal()));
             }
         });
 

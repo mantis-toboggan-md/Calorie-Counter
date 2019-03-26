@@ -5,20 +5,42 @@ import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.os.AsyncTask;
 
+import java.util.List;
+
 public class UserRepository  {
 
     private UserDao mUserDao;
-    private LiveData<User> mUser;
+    private LiveData<List<User>> mUsers;
 
     UserRepository(Application application){
         UserDatabase db = UserDatabase.getDatabase(application);
         mUserDao = db.userDao();
-        mUser = mUserDao.getUser();
+        mUsers = mUserDao.getUser();
     }
 
-    LiveData<User> getUser(){
-        return mUser;
+    LiveData<List<User>> getUser(){
+        return mUsers;
     }
+
+    User getClosestDate(Integer targetDate){ return mUserDao.getclosestDate(targetDate);}
+//
+//    private static class getClosestAsyncTask extends AsyncTask<Integer, Void, User> {
+//        private UserDao mAsyncTaskDao;
+//
+//        getClosestAsyncTask(UserDao dao){mAsyncTaskDao = dao;}
+//
+//        @Override
+//        protected User doInBackground(final Integer... params){
+//            return mAsyncTaskDao.getclosestDate(params[0]);
+//        }
+//
+//        @Override
+//        protected User onPostExecute(User mUser){
+//            return mUser;
+//        }
+//    }
+
+
 
     public void insert (User user){
         new insertAsyncTask(mUserDao).execute(user);
@@ -35,6 +57,22 @@ public class UserRepository  {
         @Override
         protected Void doInBackground(final User... params) {
             mAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
+    public void deleteAll(){ new deleteAllUsersAsyncTask(mUserDao).execute();}
+
+    private static class deleteAllUsersAsyncTask extends AsyncTask<Void, Void, Void> {
+        private UserDao mAsyncTaskDao;
+
+        deleteAllUsersAsyncTask(UserDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAll();
             return null;
         }
     }

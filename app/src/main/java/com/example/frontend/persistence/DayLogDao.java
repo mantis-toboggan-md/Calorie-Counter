@@ -18,4 +18,10 @@ public interface DayLogDao {
     @Query("SELECT * FROM day_log")
     LiveData<List<DayLog>> getDayLogs();
 
+    @Query("DELETE FROM day_log WHERE id=:id")
+    void deleteOne(Integer id);
+
+    @Query("SELECT * FROM day_log WHERE :dayInt=currentDay")
+    LiveData<List<DayLog>>getOneDayLogs(Integer dayInt);
+
 }

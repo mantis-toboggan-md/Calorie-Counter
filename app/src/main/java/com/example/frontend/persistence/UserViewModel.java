@@ -5,18 +5,20 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
+import java.util.List;
+
 public class UserViewModel extends AndroidViewModel {
     private UserRepository mRepository;
-    private LiveData<User> mUser;
+    private LiveData<List<User>> mUsers;
 
     public UserViewModel(Application application){
         super(application);
         mRepository = new UserRepository(application);
-        mUser = mRepository.getUser();
+        mUsers = mRepository.getUser();
     }
 
-    public LiveData<User> getUser(){
-        return mUser;
+    public LiveData<List<User>> getUser(){
+        return mUsers;
     }
 
     public void insert(User user){
@@ -26,4 +28,8 @@ public class UserViewModel extends AndroidViewModel {
     public void update(long goal){
         mRepository.update(goal);
     }
+
+    public User getClosestDate(Integer targetDate) {return mRepository.getClosestDate(targetDate);}
+
+    public void deleteAll(){mRepository.deleteAll();}
 }

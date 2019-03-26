@@ -22,10 +22,14 @@ public class DayLogViewModel extends AndroidViewModel {
         return mDayLogs;
     }
 
+    public LiveData<List<DayLog>> getOneDayLogs(Integer dateInt){return mRepository.getOneDayLogs(dateInt);}
+
     public void insert(DayLog dayLog){
         mRepository.insert(dayLog);
     }
 
     public void deleteAll(){mRepository.deleteAll();}
+
+    public void deleteOne(Integer id){mRepository.deleteOne(id);}
 
 }

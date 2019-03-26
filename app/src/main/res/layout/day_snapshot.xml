@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_intake_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Intake:"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_date"
+        app:layout_constraintEnd_toStartOf="@+id/text_intake_value" />
+
+    <TextView
+        android:id="@+id/text_intake_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text='"intake"'
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_intake_label"
+        app:layout_constraintEnd_toStartOf="@+id/text_goal_label" />
+
+    <TextView
+        android:id="@+id/text_goal_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Goal:"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_intake_value"
+        app:layout_constraintEnd_toStartOf="@+id/text_goal_value" />
+
+    <TextView
+        android:id="@+id/text_diff_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Difference:"
+        app:layout_constraintEnd_toStartOf="@+id/text_diff_value"
+        app:layout_constraintTop_toBottomOf="@+id/text_intake_label" />
+
+    <TextView
+        android:id="@+id/text_diff_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text='"difference"'
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_diff_label"
+        app:layout_constraintEnd_toStartOf="@+id/button_edit_day" />
+
+    <TextView
+        android:id="@+id/text_goal_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text='"goal"'
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_goal_label"
+        app:layout_constraintEnd_toStartOf="@+id/button_edit_day" />
+
+    <Button
+        android:id="@+id/button_edit_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="395dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_diff_label" />
+</android.support.constraint.ConstraintLayout>

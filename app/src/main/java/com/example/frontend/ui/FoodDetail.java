@@ -3,8 +3,16 @@ package com.example.frontend.ui;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.media.Rating;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.SubscriptSpan;
+import android.text.style.SuperscriptSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +39,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Calendar;
 
 public class FoodDetail extends AppCompatActivity {
@@ -42,9 +52,12 @@ public class FoodDetail extends AppCompatActivity {
     String protein = null;
     String carbs = null;
     String fat = null;
-    String ghg = null;
-    String land = null;
-    String water = null;
+    Double ghg = null;
+    Double land = null;
+    Double water = null;
+    String ghgRating = null;
+    String landRating = null;
+    String waterRating = null;
     Double amtg;
     Integer kCalAdded = null;
     JSONObject foodObjectAll = null;
@@ -124,11 +137,15 @@ public class FoodDetail extends AppCompatActivity {
           TextView ghgEl = findViewById(R.id.text_ghg_value);
           TextView landEl = findViewById(R.id.text_land_value);
           TextView waterEl = findViewById(R.id.text_water_value);
+          TextView ghgRatingEl = findViewById(R.id.text_ghg_rating);
+          TextView landRatingEl = findViewById(R.id.text_land_rating);
+          TextView waterRatingEl = findViewById(R.id.text_water_rating);
             super.onPostExecute(s);
             try {
                 foodObjectAll = (JSONObject) new JSONTokener(s).nextValue();
                 JSONObject foodObject = foodObjectAll.getJSONObject("food");
-                JSONObject envObject = foodObjectAll.getJSONObject("env");
+                JSONObject envObject = foodObjectAll.getJSONObject("envkCal");
+                JSONObject envRatingObject = foodObjectAll.getJSONObject("envRating");
                 foodName = foodObject.getString("name");
                 foodServing = foodObject.getString("measure") + " (" + foodObject.getString("weight") + "g)";
                 kCal = foodObject.getJSONArray("nutrients").getJSONObject(0).getString("value");
@@ -137,13 +154,18 @@ public class FoodDetail extends AppCompatActivity {
                 fat = foodObject.getJSONArray("nutrients").getJSONObject(3).getString("value");
 
                 if(envObject.getString("land")!=null){
-                    ghg = envObject.getString("ghg");
-                    land = envObject.getString("land");
-                    water = envObject.getString("water");
+                    ghg = envObject.getDouble("ghg");
+                    land = envObject.getDouble("land");
+                    water = envObject.getDouble("water");
+                    ghgRating = envRatingObject.getString("ghg");
+                    landRating = envRatingObject.getString("land");
+                    waterRating = envRatingObject.getString("water");
                 }
             } catch (JSONException e){
                 Log.i("json", e.toString() );
             }finally {
+
+
                 foodNameEl.setText(foodName);
                 foodServingEl.setText(foodServing);
                 kCalEl.setText(kCal);
@@ -151,9 +173,39 @@ public class FoodDetail extends AppCompatActivity {
                 carbsEl.setText(carbs + "g");
                 fatEl.setText(fat + "g");
                 if(ghg != null){
-                    ghgEl.setText(ghg.toString());
-                    landEl.setText(land.toString());
-                    waterEl.setText(water.toString());
+                    Spanned ghgText = Html.fromHtml(String.format("%.3f", ghg)+" grams CO<sub>2</sub>",Html.FROM_HTML_MODE_LEGACY);
+                    ghgEl.setText(ghgText);
+                    ghgRatingEl.setText(ghgRating );
+                    if(ghgRating.equals("poor")){
+                        ghgRatingEl.setTextAppearance(FoodDetail.this, R.style.badText);
+                    } else if(ghgRating.equals("fair")){
+                        ghgRatingEl.setTextAppearance(FoodDetail.this, R.style.fairText);
+                    } else {
+                        ghgRatingEl.setTextAppearance(FoodDetail.this, R.style.goodText);
+                    }
+                }
+                if(land != null){
+                    Spanned mText = Html.fromHtml(String.format("%.3f", land)+" m<sup>2</sup> /year",Html.FROM_HTML_MODE_LEGACY);
+                    landEl.setText(mText);
+                    landRatingEl.setText(landRating);
+                    if(landRating.equals("poor")){
+                        landRatingEl.setTextAppearance(FoodDetail.this, R.style.badText);
+                    } else if(landRating.equals("fair")){
+                        landRatingEl.setTextAppearance(FoodDetail.this, R.style.fairText);
+                    } else {
+                        landRatingEl.setTextAppearance(FoodDetail.this, R.style.goodText);
+                    }
+                }
+                if(water != null){
+                    waterEl.setText(String.format("%.3f", water)  + " cubic meters");
+                    waterRatingEl.setText(waterRating);
+                    if(waterRating.equals("poor")){
+                        waterRatingEl.setTextAppearance(FoodDetail.this, R.style.badText);
+                    } else if(waterRating.equals("fair")){
+                        waterRatingEl.setTextAppearance(FoodDetail.this, R.style.fairText);
+                    } else {
+                        waterRatingEl.setTextAppearance(FoodDetail.this, R.style.goodText);
+                    }
                 }
 
             }
@@ -215,8 +267,10 @@ public class FoodDetail extends AppCompatActivity {
         //calculate nutrients of amount to log
         kCalAdded = (int)Math.round(amtg * caloriePerGram);
 
-        //get current day in string format
-        String currentDay = Calendar.getInstance().getTime().toString();
+        //get current day in integer format yyyymmdd
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+        Integer currentDay = Integer.valueOf(df.format(c.getTime()));
 
         //get db access
         mDayLogViewModel = ViewModelProviders.of(this).get(DayLogViewModel.class);
@@ -224,7 +278,7 @@ public class FoodDetail extends AppCompatActivity {
 
 
         //add food to db
-        mDayLogViewModel.insert(new DayLog(currentDay, foodName, ghg, land, water, amtg, kCalAdded, pAdded, carbsAdded, fatAdded));
+        mDayLogViewModel.insert(new DayLog(currentDay, foodName, String.valueOf(ghg), String.valueOf(land), String.valueOf(water), amtg, kCalAdded, pAdded, carbsAdded, fatAdded));
 
         //close this screen, return to search
         finish();

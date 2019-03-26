@@ -13,7 +13,7 @@ import static java.util.Calendar.*;
 
 @Entity(tableName = "day_log")
 public class DayLog {
-    private String currentDay;
+    private Integer currentDay;
     private String foodName;
     private String ghg;
     private String land;
@@ -26,7 +26,7 @@ public class DayLog {
     @PrimaryKey(autoGenerate=true)
     private Integer id;
 
-    public DayLog(String currentDay, String foodName, String ghg, String land, String water, Double amtg, Integer kCal, Double p, Double carbs, Double fat){
+    public DayLog(Integer currentDay, String foodName, String ghg, String land, String water, Double amtg, Integer kCal, Double p, Double carbs, Double fat){
         this.currentDay = currentDay;
         this.foodName = foodName;
         this.ghg = ghg;
@@ -39,7 +39,7 @@ public class DayLog {
         this.fat = fat;
     }
 
-    public String getCurrentDay(){
+    public Integer getCurrentDay(){
         return this.currentDay;
     }
 

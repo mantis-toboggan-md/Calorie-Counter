@@ -28,6 +28,8 @@ public class DayLogRepository  {
         return mDayLogs;
     }
 
+    LiveData<List<DayLog>> getOneDayLogs(Integer dateInt){return mDayLogDao.getOneDayLogs(dateInt);}
+
     public void insert (DayLog dayLog){
         new insertAsyncTask(mDayLogDao).execute(dayLog);
     }
@@ -42,6 +44,19 @@ public class DayLogRepository  {
         @Override
         protected Void doInBackground(Void... voids) {
             mAsyncTaskDao.deleteAll();
+            return null;
+        }
+    }
+
+    private static class deleteOneAsyncTask extends AsyncTask<Integer, Void, Void>{
+        private DayLogDao mAsyncTaskDao;
+
+        deleteOneAsyncTask(DayLogDao dao){
+            mAsyncTaskDao = dao;
+        }
+        @Override
+        protected Void doInBackground(Integer... params){
+            mAsyncTaskDao.deleteOne(params[0]);
             return null;
         }
     }
@@ -63,6 +78,10 @@ public class DayLogRepository  {
             mAsyncTaskDao.insert(params[0]);
             return null;
         }
+    }
+
+    public void deleteOne(Integer id){
+        new deleteOneAsyncTask(mDayLogDao).execute(id);
     }
 
 }

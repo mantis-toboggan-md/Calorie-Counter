@@ -8,7 +8,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
-@Database(entities = {User.class}, version = 1, exportSchema = false)
+@Database(entities = {User.class}, version = 2, exportSchema = false)
 public abstract class UserDatabase extends RoomDatabase {
 
     public abstract UserDao userDao();
@@ -22,7 +22,8 @@ public abstract class UserDatabase extends RoomDatabase {
                     // Create database here
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             UserDatabase.class, "user_database")
-                            .addMigrations(MIGRATION_1_2)
+                           // .addMigrations(MIGRATION_1_2)
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
