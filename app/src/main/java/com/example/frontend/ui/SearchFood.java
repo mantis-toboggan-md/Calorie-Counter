@@ -31,7 +31,7 @@ public class SearchFood extends AppCompatActivity {
     private static final String TAG = "SearchFood";
     private TextView mTextMessage;
     private TextView mSearchText;
-
+    public Integer currentDay;
 
 
 
@@ -57,6 +57,8 @@ public class SearchFood extends AppCompatActivity {
             }
         });
 
+        currentDay = getIntent().getIntExtra("currentDay", 0);
+
     }
 
 
@@ -69,6 +71,7 @@ public class SearchFood extends AppCompatActivity {
         Intent intent = new Intent(this, FoodDetail.class);
         Log.i("inspect", ndbno);
         intent.putExtra("ndbno", ndbno);
+        intent.putExtra("currentDay", currentDay);
         startActivity(intent);
     }
 

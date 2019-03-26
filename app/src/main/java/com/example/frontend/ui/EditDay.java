@@ -1,24 +1,14 @@
 package com.example.frontend.ui;
 
-import android.app.Activity;
-import android.arch.lifecycle.LiveData;
-import java.util.*;
-import java.text.*;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,122 +16,41 @@ import android.widget.TextView;
 import com.example.frontend.R;
 import com.example.frontend.persistence.DayLog;
 import com.example.frontend.persistence.DayLogViewModel;
-import com.example.frontend.persistence.User;
-import com.example.frontend.persistence.UserViewModel;
 
-import org.w3c.dom.Text;
-
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener {
+public class EditDay extends AppCompatActivity {
 
-    private TextView todaysDate;
-    private DrawerLayout drawerLayout;
-    private UserViewModel mUserViewModel;
-    private DayLogViewModel mDayLogViewModel;
-    public Integer currentDay;
-
+    DayLogViewModel mDayLogViewModel;
+    Integer currentDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_edit_day);
+        //get layout inside scrollview to store food log items
+        LinearLayout thisParentLayout = findViewById(R.id.linear_food_log);
+        //remove previous food logs
+        thisParentLayout.removeAllViews();
 
-        todaysDate = findViewById(R.id.text_today_date);
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat ft =
-                new SimpleDateFormat ("EEEE, MMMM dd");
-        todaysDate.setText(ft.format(c.getTime()));
-        //connect to user DB to get calorie goal
-        mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-        final TextView mGoalCal = findViewById(R.id.text_goal_calories);
-//        long mGoal = 1600;
-//        mUserViewModel.insert(new User(mGoal, new Integer(20190325)));
-       // mUserViewModel.deleteAll();
-        mUserViewModel.getUser().observe(this, new Observer<List<User>>(){
-           @Override
-           public void onChanged(@Nullable final List<User> userList){
-               if(userList.size() == 0){
-                   Log.i("inspect", "list of users is empty");
-                   long mGoal = 1600;
-                   mUserViewModel.insert(new User(mGoal, new Integer(20190325)));
-               } else {
-                   mGoalCal.setText(String.valueOf(userList.get(userList.size()-1).getGoal()));
-               }
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+        Integer today = Integer.valueOf(df.format(Calendar.getInstance().getTime()));
+        currentDay = getIntent().getIntExtra("currentDay", today );
 
-           }
-        });
-
-
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
-
-        ActionBarDrawerToggle toggle =
-                new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                        R.string.navigation_drawer_open,
-                        R.string.navigation_drawer_close);
-        if (drawerLayout != null) {
-            drawerLayout.addDrawerListener(toggle);
-        }
-        toggle.syncState();
-        NavigationView navigationView = findViewById(R.id.nav_side);
-
-        if (navigationView != null) {
-            navigationView.setNavigationItemSelectedListener(this);
-        }
-
-        //get today's date in integer format
-        SimpleDateFormat intFormat = new SimpleDateFormat("yyyyMMdd");
-        currentDay = Integer.valueOf(intFormat.format(Calendar.getInstance().getTime()));
-
-        // Parent layout
-        LinearLayout thisParentLayout = (LinearLayout)findViewById(R.id.linear_food_log);
-        //get daily log for today's date
         getDailyLog(currentDay, thisParentLayout);
-
-    }
-
-
-    public void goToSearch(View view) {
-        Log.i("where", "go to search button pressed");
-        Intent intent = new Intent(this, SearchFood.class);
-        Log.i("where intent in main", currentDay.toString());
-        intent.putExtra("currentDay", currentDay);
-        startActivity(intent);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        menuItem.setChecked(true);
-        drawerLayout.closeDrawers();
-        switch(menuItem.getItemId()){
-            case R.id.nav_search: {
-                Intent intent = new Intent(MainActivity.this, SearchFood.class);
-                startActivity(intent);
-                return true;
-            }
-            case R.id.nav_profile: {
-                Intent intent = new Intent(MainActivity.this, Profile.class);
-                startActivity(intent);
-                return true;
-            }
-            case R.id.nav_history: {
-                Intent intent = new Intent(MainActivity.this, History.class);
-                startActivity(intent);
-                return true;
-            }
-            default: return false;
-        }
     }
 
     public void getDailyLog(Integer intDate, final LinearLayout parentLayout){
+        TextView dayTitle = findViewById(R.id.text_today_date);
+        dayTitle.setText(intDate.toString());
+
         //connect to daily log db
         mDayLogViewModel = ViewModelProviders.of(this).get(DayLogViewModel.class);
 
 
-       // mDayLogViewModel.deleteAll();
+        // mDayLogViewModel.deleteAll();
 
 
 
@@ -158,9 +67,6 @@ public class MainActivity extends AppCompatActivity implements
                 //use layoutinflater to add views (indiv food results) to scroll view
                 LayoutInflater layoutInflater = getLayoutInflater();
                 View view;
-
-
-                //remove previous food logs
                 parentLayout.removeAllViews();
 
                 //iterate over list and add food_log_item layout
@@ -168,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements
                     //add a food log view to the linear layout inside scroll view
                     view = layoutInflater.inflate(R.layout.food_log_item, parentLayout, false );
                     LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.linear_food_log);
+
+
+
                     //add log's info to view
                     TextView foodNameEl = view.findViewById(R.id.text_food_name);
                     TextView foodAmtEl = view.findViewById(R.id.text_food_amt);
@@ -220,5 +129,14 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
         });
+    }
+
+
+    public void goToSearch(View view) {
+        Log.i("where", "go to search button pressed");
+        Intent intent = new Intent(this, SearchFood.class);
+        Log.i("where intent in main", currentDay.toString());
+        intent.putExtra("currentDay", currentDay);
+        startActivity(intent);
     }
 }

@@ -213,6 +213,7 @@ public class FoodDetail extends AppCompatActivity {
     }
 
     public void logFood(View view){
+        Log.i("where", "log button pressed");
         Double caloriePerGram =  null;
         Integer gramsInServing = null;
         //get calories in a gram, grams in a serving
@@ -267,19 +268,17 @@ public class FoodDetail extends AppCompatActivity {
         //calculate nutrients of amount to log
         kCalAdded = (int)Math.round(amtg * caloriePerGram);
 
-        //get current day in integer format yyyymmdd
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-        Integer currentDay = Integer.valueOf(df.format(c.getTime()));
-
+        Log.i("where", "database opening...");
         //get db access
         mDayLogViewModel = ViewModelProviders.of(this).get(DayLogViewModel.class);
 
+        //get day to add food log to
+        Integer currentDay = getIntent().getIntExtra("currentDay", 20190330);
 
-
+        Log.i("where", currentDay.toString());
         //add food to db
         mDayLogViewModel.insert(new DayLog(currentDay, foodName, String.valueOf(ghg), String.valueOf(land), String.valueOf(water), amtg, kCalAdded, pAdded, carbsAdded, fatAdded));
-
+        Log.i("where", "food added to db");
         //close this screen, return to search
         finish();
     }
