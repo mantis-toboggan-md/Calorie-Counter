@@ -49,8 +49,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:text='"goal"'
         app:layout_constraintBaseline_toBaselineOf="@+id/text_goal_label"
         app:layout_constraintStart_toEndOf="@+id/text_goal_label" />
 
@@ -82,8 +80,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:text='"intake"'
+        android:text="0"
         app:layout_constraintBaseline_toBaselineOf="@+id/text_intake_level"
         app:layout_constraintStart_toEndOf="@+id/text_intake_level" />
 
@@ -113,8 +110,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:text="TextView"
         app:layout_constraintBaseline_toBaselineOf="@+id/text_total_kcal"
         app:layout_constraintStart_toEndOf="@+id/text_total_kcal" />
 
@@ -123,8 +118,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:text="TextView"
         app:layout_constraintBaseline_toBaselineOf="@+id/text_total_p"
         app:layout_constraintStart_toEndOf="@+id/text_total_p" />
 
@@ -133,8 +126,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:text="TextView"
         app:layout_constraintBaseline_toBaselineOf="@+id/text_total_carbs"
         app:layout_constraintStart_toEndOf="@+id/text_total_carbs" />
 

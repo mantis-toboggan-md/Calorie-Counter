@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.graphics.PathSegment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,20 +17,28 @@ import android.widget.TextView;
 import com.example.frontend.R;
 import com.example.frontend.persistence.DayLog;
 import com.example.frontend.persistence.DayLogViewModel;
+import com.example.frontend.persistence.User;
+import com.example.frontend.persistence.UserViewModel;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
 public class EditDay extends AppCompatActivity {
-
+    SimpleDateFormat ft =
+            new SimpleDateFormat ("EEEE, MMMM dd");
+    SimpleDateFormat intFormat = new SimpleDateFormat("yyyyMMdd");
     DayLogViewModel mDayLogViewModel;
+    UserViewModel mUserViewModel;
     Integer currentDay;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_day);
+
         //get layout inside scrollview to store food log items
         LinearLayout thisParentLayout = findViewById(R.id.linear_food_log);
         //remove previous food logs
@@ -39,12 +48,36 @@ public class EditDay extends AppCompatActivity {
         Integer today = Integer.valueOf(df.format(Calendar.getInstance().getTime()));
         currentDay = getIntent().getIntExtra("currentDay", today );
 
+        TextView currentDayEL = findViewById(R.id.text_today_date);
+        try{
+            currentDayEL.setText(ft.format(intFormat.parse(String.valueOf(currentDay))));
+        }catch(ParseException e){
+            Log.e("parse", e.toString());
+        }
+
+        //connect to user DB to get calorie goal
+        mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        final TextView mGoalCal = findViewById(R.id.text_goal_calories);
+        mUserViewModel.getUser().observe(this, new Observer<List<User>>(){
+            @Override
+            public void onChanged(@Nullable final List<User> userList){
+                if(userList.size() == 0){
+                    Log.i("inspect", "list of users is empty");
+                    long mGoal = 1600;
+                    mUserViewModel.insert(new User(mGoal, new Integer(20190325)));
+                } else {
+                    mGoalCal.setText(String.valueOf(userList.get(userList.size()-1).getGoal()));
+                }
+
+            }
+        });
+
+
         getDailyLog(currentDay, thisParentLayout);
     }
 
     public void getDailyLog(Integer intDate, final LinearLayout parentLayout){
-        TextView dayTitle = findViewById(R.id.text_today_date);
-        dayTitle.setText(intDate.toString());
+
 
         //connect to daily log db
         mDayLogViewModel = ViewModelProviders.of(this).get(DayLogViewModel.class);
@@ -58,11 +91,23 @@ public class EditDay extends AppCompatActivity {
         mDayLogViewModel.getOneDayLogs(intDate).observe(this, new Observer<List<DayLog>>() {
             @Override
             public void onChanged(@Nullable List<DayLog> dayLogs) {
+                Log.i("inspect", "food list updated");
                 //initialize variables to total nutrients
                 Double totalkCal = 0.0;
                 Double totalP = 0.0;
                 Double totalCarbs = 0.0;
                 Double totalFat = 0.0;
+
+                TextView totalkCalEl = findViewById(R.id.text_total_kcal);
+                TextView totalPEl = findViewById(R.id.text_total_p);
+                TextView totalCarbsEl = findViewById(R.id.text_total_carbs);
+                TextView totalFatEl = findViewById(R.id.text_total_fat);
+
+                //display totals
+                totalkCalEl.setText(String.valueOf(Math.round(totalkCal) +" cal"));
+                totalPEl.setText(String.valueOf(Math.round(totalP) +"g p"));
+                totalCarbsEl.setText(String.valueOf(Math.round(totalCarbs) +"g carbs"));
+                totalFatEl.setText(String.valueOf(Math.round(totalFat) +"g fat"));
 
                 //use layoutinflater to add views (indiv food results) to scroll view
                 LayoutInflater layoutInflater = getLayoutInflater();
@@ -88,11 +133,6 @@ public class EditDay extends AppCompatActivity {
                     TextView foodLandEl = view.findViewById(R.id.text_food_land);
                     TextView foodWaterEl = view.findViewById(R.id.text_food_water);
 
-                    TextView totalkCalEl = findViewById(R.id.text_total_kcal);
-                    TextView totalPEl = findViewById(R.id.text_total_p);
-                    TextView totalCarbsEl = findViewById(R.id.text_total_carbs);
-                    TextView totalFatEl = findViewById(R.id.text_total_fat);
-
 
                     foodNameEl.setText(log.getFoodName());
                     foodAmtEl.setText(String.valueOf(Math.round(log.getAmtg()))+"g");
@@ -100,9 +140,9 @@ public class EditDay extends AppCompatActivity {
                     foodPEl.setText(String.valueOf(Math.round(log.getP()))+"g");
                     foodCarbEl.setText(String.valueOf(Math.round(log.getCarbs()))+"g");
                     foodFatEl.setText(String.valueOf(Math.round(log.getFat()))+"g");
-                    foodGhgEl.setText(log.getGhg());
-                    foodWaterEl.setText(log.getWater());
-                    foodLandEl.setText(log.getLand());
+                    foodGhgEl.setText(String.format("%.3f",Double.valueOf(log.getGhg())));
+                    foodWaterEl.setText(String.format(String.format("%.3f",Double.valueOf(log.getWater()))));
+                    foodLandEl.setText(String.format("%.3f",Double.valueOf(log.getLand())));
 
                     //add foods' nutrients to totals
                     totalkCal += log.getKCal();
@@ -133,7 +173,6 @@ public class EditDay extends AppCompatActivity {
 
 
     public void goToSearch(View view) {
-        Log.i("where", "go to search button pressed");
         Intent intent = new Intent(this, SearchFood.class);
         Log.i("where intent in main", currentDay.toString());
         intent.putExtra("currentDay", currentDay);

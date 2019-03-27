@@ -155,6 +155,17 @@ public class MainActivity extends AppCompatActivity implements
                 Double totalCarbs = 0.0;
                 Double totalFat = 0.0;
 
+                TextView totalkCalEl = findViewById(R.id.text_total_kcal);
+                TextView totalPEl = findViewById(R.id.text_total_p);
+                TextView totalCarbsEl = findViewById(R.id.text_total_carbs);
+                TextView totalFatEl = findViewById(R.id.text_total_fat);
+
+                //display totals
+                totalkCalEl.setText(String.valueOf(Math.round(totalkCal) +" cal"));
+                totalPEl.setText(String.valueOf(Math.round(totalP) +"g p"));
+                totalCarbsEl.setText(String.valueOf(Math.round(totalCarbs) +"g carbs"));
+                totalFatEl.setText(String.valueOf(Math.round(totalFat) +"g fat"));
+
                 //use layoutinflater to add views (indiv food results) to scroll view
                 LayoutInflater layoutInflater = getLayoutInflater();
                 View view;
@@ -179,11 +190,6 @@ public class MainActivity extends AppCompatActivity implements
                     TextView foodLandEl = view.findViewById(R.id.text_food_land);
                     TextView foodWaterEl = view.findViewById(R.id.text_food_water);
 
-                    TextView totalkCalEl = findViewById(R.id.text_total_kcal);
-                    TextView totalPEl = findViewById(R.id.text_total_p);
-                    TextView totalCarbsEl = findViewById(R.id.text_total_carbs);
-                    TextView totalFatEl = findViewById(R.id.text_total_fat);
-
 
                     foodNameEl.setText(log.getFoodName());
                     foodAmtEl.setText(String.valueOf(Math.round(log.getAmtg()))+"g");
@@ -191,9 +197,9 @@ public class MainActivity extends AppCompatActivity implements
                     foodPEl.setText(String.valueOf(Math.round(log.getP()))+"g");
                     foodCarbEl.setText(String.valueOf(Math.round(log.getCarbs()))+"g");
                     foodFatEl.setText(String.valueOf(Math.round(log.getFat()))+"g");
-                    foodGhgEl.setText(log.getGhg());
-                    foodWaterEl.setText(log.getWater());
-                    foodLandEl.setText(log.getLand());
+                    foodGhgEl.setText(String.format(String.format("%.3f",Double.valueOf(log.getGhg()))));
+                    foodWaterEl.setText(String.format(String.format("%.3f",Double.valueOf(log.getWater()))));
+                    foodLandEl.setText(String.format("%.3f",Double.valueOf(log.getLand())));
 
                     //add foods' nutrients to totals
                     totalkCal += log.getKCal();

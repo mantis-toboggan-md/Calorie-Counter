@@ -22,6 +22,7 @@ import com.example.frontend.persistence.User;
 import com.example.frontend.persistence.UserDao;
 import com.example.frontend.persistence.UserViewModel;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -41,6 +42,7 @@ import java.util.Map;
 
 public class History extends AppCompatActivity {
     final SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+    final SimpleDateFormat smallDate = new SimpleDateFormat("MM/dd");
     private DayLogViewModel mDayLogViewModel;
     Date weekAgo;
     Date newStart;
@@ -61,6 +63,9 @@ public class History extends AppCompatActivity {
     }
 
     public void getDailySnapShots(Date start, Date end) {
+        Integer totalDiff = 0;
+        final TextView totalDiffEl = findViewById(R.id.text_total_diff_value);
+        final TextView avgDiffEl = findViewById(R.id.text_avg_diff_value);
 
         //initialize HashMap of dates and caloric differences (to graph)
         final LinkedHashMap<Date, Integer> weekData = new LinkedHashMap<Date, Integer>();
@@ -79,11 +84,20 @@ public class History extends AppCompatActivity {
         Integer currentDay = Integer.valueOf(df.format(start));
         Integer endDay = Integer.valueOf(df.format(end));
         while (currentDay >= endDay) {
+
             final Integer dayInLoop = currentDay;
             //add day's snapshot to parent view
             final View view = layoutInflater.inflate(R.layout.day_snapshot, parentLayout, false);
             TextView dateEl = view.findViewById(R.id.text_date);
-            dateEl.setText(currentDay.toString());
+            try{
+                dateEl.setText(smallDate.format(df.parse(String.valueOf(dayInLoop))));
+            }catch (ParseException e){
+                Log.e("parse", e.toString());
+            }
+
+
+            final TextView intakeEl = view.findViewById(R.id.text_intake_value);
+            final TextView diffEl = view.findViewById(R.id.text_diff_value);
 
             //get most recent calorie goal using asynctask
             class getClosestAsyncTask extends AsyncTask<Integer, Void, User> {
@@ -96,16 +110,19 @@ public class History extends AppCompatActivity {
 
                 @Override
                 protected void onPostExecute(User mUser) {
+                    long totalDiff = Long.valueOf(totalDiffEl.getText().toString());
                     long goal = 1600;
                     if (mUser != null) {
                         goal = mUser.getGoal();
                     }
                     TextView goalEl = view.findViewById(R.id.text_goal_value);
                     goalEl.setText(String.valueOf(goal));
-                    TextView intakeEl = view.findViewById(R.id.text_intake_value);
-                    TextView diffEl = view.findViewById(R.id.text_diff_value);
+
                     double difference =  Double.valueOf(intakeEl.getText().toString()) - goal;
                     diffEl.setText(String.valueOf(difference));
+                    totalDiff += Math.round(difference);
+                    totalDiffEl.setText(String.valueOf(totalDiff));
+                    avgDiffEl.setText(String.valueOf(totalDiff/7));
 
                     //add difference and date to weekData
                     try{
@@ -154,6 +171,7 @@ public class History extends AppCompatActivity {
                     new getClosestAsyncTask().execute(dayInLoop);
                 }
             });
+
 
 
 
@@ -222,9 +240,14 @@ public class History extends AppCompatActivity {
 
             dataPoints[i] = new DataPoint(day, weekData.get(day));
         }
-        SimpleDateFormat smallDate = new SimpleDateFormat("M/d");
+
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(graph.getContext(), smallDate));
+        series.setColor(getResources().getColor(R.color.colorAccent));
         graph.addSeries(series);
+
+       graph.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.HORIZONTAL);
+        graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+    //    graph.getGridLabelRenderer().setHumanRounding(false, true);
+
     }
 }
