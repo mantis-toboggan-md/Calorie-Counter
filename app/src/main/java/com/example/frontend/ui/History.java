@@ -21,17 +21,26 @@ import com.example.frontend.persistence.DayLogViewModel;
 import com.example.frontend.persistence.User;
 import com.example.frontend.persistence.UserDao;
 import com.example.frontend.persistence.UserViewModel;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.PointsGraphSeries;
 
 import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class History extends AppCompatActivity {
-
+    final SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
     private DayLogViewModel mDayLogViewModel;
     Date weekAgo;
     Date newStart;
@@ -44,7 +53,7 @@ public class History extends AppCompatActivity {
         setContentView(R.layout.activity_history);
         Calendar c = Calendar.getInstance();
         Date today = c.getTime();
-        c.add(Calendar.DAY_OF_YEAR, -7);
+        c.add(Calendar.DAY_OF_YEAR, -6);
         weekAgo = c.getTime();
         newEnd = c.getTime();
 
@@ -52,7 +61,10 @@ public class History extends AppCompatActivity {
     }
 
     public void getDailySnapShots(Date start, Date end) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+
+        //initialize HashMap of dates and caloric differences (to graph)
+        final LinkedHashMap<Date, Integer> weekData = new LinkedHashMap<Date, Integer>();
+
         //connect to daily log db
         mDayLogViewModel = ViewModelProviders.of(this).get(DayLogViewModel.class);
 
@@ -92,8 +104,21 @@ public class History extends AppCompatActivity {
                     goalEl.setText(String.valueOf(goal));
                     TextView intakeEl = view.findViewById(R.id.text_intake_value);
                     TextView diffEl = view.findViewById(R.id.text_diff_value);
-                    double difference = goal - Double.valueOf(intakeEl.getText().toString());
+                    double difference =  Double.valueOf(intakeEl.getText().toString()) - goal;
                     diffEl.setText(String.valueOf(difference));
+
+                    //add difference and date to weekData
+                    try{
+                        weekData.put(df.parse(String.valueOf(dayInLoop)), (int)difference);
+                        if(weekData.size()==7){
+                            Log.i("weekData size", String.valueOf(weekData.size()));
+                            //once each day in week has been added to HashMap, graph data
+                            createGraph(weekData, newEnd);
+                        }
+                    } catch (ParseException e){
+                        Log.e("parse dayInLoop", e.toString());
+                    }
+
 
                 }
             }
@@ -106,7 +131,7 @@ public class History extends AppCompatActivity {
                     TextView totalkCalEl = view.findViewById(R.id.text_intake_value);
 
 
-                    //add event listener to button
+                    //add event listener to edit button, open edit day activity
                     Button editButton = view.findViewById(R.id.button_edit_day);
                     editButton.setOnClickListener(new Button.OnClickListener() {
                         @Override
@@ -119,7 +144,6 @@ public class History extends AppCompatActivity {
 
                     //iterate over food logs to get totals
                     for (final DayLog log : dayLogs) {
-                        Log.i("inspect each food log", log.getFoodName());
                         //add foods' nutrients to totals
                         totalkCal += log.getKCal();
 
@@ -127,7 +151,6 @@ public class History extends AppCompatActivity {
 
                     //set text in snapshot
                     totalkCalEl.setText(totalkCal.toString());
-                    Log.i("inspect setting of intake", totalkCal.toString());
                     new getClosestAsyncTask().execute(dayInLoop);
                 }
             });
@@ -152,6 +175,7 @@ public class History extends AppCompatActivity {
 
         }
 
+
     }
 
 
@@ -160,7 +184,7 @@ public class History extends AppCompatActivity {
         c.setTime(newEnd);
         c.add(Calendar.DAY_OF_YEAR, -1);
         newStart = c.getTime();
-        c.add(Calendar.DAY_OF_YEAR, -7);
+        c.add(Calendar.DAY_OF_YEAR, -6);
         newEnd = c.getTime();
         getDailySnapShots(newStart, newEnd);
     }
@@ -173,9 +197,34 @@ public class History extends AppCompatActivity {
         c.setTime(newStart);
         c.add(Calendar.DAY_OF_YEAR, 1);
         newEnd = c.getTime();
-        c.add(Calendar.DAY_OF_YEAR, 7);
+        c.add(Calendar.DAY_OF_YEAR, 6);
         newStart = c.getTime();
         getDailySnapShots(newStart, newEnd);
 
+    }
+
+    private void createGraph(LinkedHashMap<Date, Integer> weekData, Date newEnd){
+        GraphView graph = (GraphView) findViewById(R.id.graph);
+        graph.removeAllSeries();
+        //create array of DataPoints where x is a Date and y is the difference between cals consumed and cal goal
+        DataPoint[] dataPoints = new DataPoint[7];
+        for(int i = 0; i <7; i ++){
+            Date day = null;
+            Calendar c = Calendar.getInstance();
+            c.setTime(newEnd);
+            c.add(Calendar.DAY_OF_YEAR, i);
+            //convert day to and from formatting to get rid of exact time (and match Date in hashmap)
+            try{
+                day = df.parse(df.format((c.getTime())));
+            } catch(ParseException e ){
+                Log.e("parse", e.toString());
+            }
+
+            dataPoints[i] = new DataPoint(day, weekData.get(day));
+        }
+        SimpleDateFormat smallDate = new SimpleDateFormat("M/d");
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(graph.getContext(), smallDate));
+        graph.addSeries(series);
     }
 }
