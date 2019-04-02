@@ -8,7 +8,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
-@Database(entities = {DayLog.class}, version = 7, exportSchema = false)
+@Database(entities = {DayLog.class}, version = 9, exportSchema = false)
 public abstract class DayLogDatabase extends RoomDatabase {
 
     public abstract DayLogDao dayLogDao();

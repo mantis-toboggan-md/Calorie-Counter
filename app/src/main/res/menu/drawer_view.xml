@@ -4,11 +4,11 @@
         <item
             android:id="@+id/nav_summary"
             android:icon="@android:drawable/ic_menu_info_details"
-            android:title="@string/summary" />
-        <item
-            android:id="@+id/nav_search"
-            android:icon="@android:drawable/ic_menu_search"
-            android:title="@string/search_foods" />
+            android:title="Log Today" />
+        <!--<item-->
+            <!--android:id="@+id/nav_search"-->
+            <!--android:icon="@android:drawable/ic_menu_search"-->
+            <!--android:title="@string/search_foods" />-->
         <item
             android:id="@+id/nav_history"
             android:icon="@android:drawable/ic_menu_recent_history"
@@ -16,7 +16,7 @@
         <item
             android:id="@+id/nav_profile"
             android:icon="@android:drawable/ic_menu_manage"
-            android:title="@string/update_profile" />
+            android:title="Update Goal" />
     </group>
 
 </menu>

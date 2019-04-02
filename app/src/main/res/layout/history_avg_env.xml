@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/text_avg_land_label"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Land:"
+        app:layout_constraintStart_toEndOf="@+id/text_ghg_avg_units"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_avg_ghg_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Gas:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_avg_ghg_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textColor="@color/ghg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_avg_ghg_label" />
+
+    <TextView
+        android:id="@+id/text_avg_land_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textColor="@color/land"
+        app:layout_constraintStart_toEndOf="@+id/text_ghg_avg_units"
+        app:layout_constraintTop_toBottomOf="@+id/text_avg_land_label" />
+
+    <TextView
+        android:id="@+id/text_avg_water_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Water:"
+        app:layout_constraintStart_toEndOf="@+id/text_land_avg_units"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_avg_water_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textColor="@color/water"
+        app:layout_constraintStart_toEndOf="@+id/text_land_avg_units"
+        app:layout_constraintTop_toBottomOf="@+id/text_avg_water_label" />
+
+    <Switch
+        android:id="@+id/switch_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:onClick="switchModes"
+        android:showText="true"
+        android:textOff="Env"
+        android:textOn="kCal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:checked="false" />
+
+    <TextView
+        android:id="@+id/text_ghg_avg_units"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="text "
+        android:textColor="@color/ghg"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_avg_ghg_value"
+        app:layout_constraintStart_toEndOf="@+id/text_avg_ghg_value" />
+
+    <TextView
+        android:id="@+id/text_land_avg_units"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="text "
+        android:textColor="@color/land"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_avg_land_value"
+        app:layout_constraintStart_toEndOf="@+id/text_avg_land_value" />
+
+    <TextView
+        android:id="@+id/text_water_avg_units"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="text "
+        android:textColor="@color/water"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_avg_water_value"
+        app:layout_constraintStart_toEndOf="@+id/text_avg_water_value" />
+
+
+</android.support.constraint.ConstraintLayout>

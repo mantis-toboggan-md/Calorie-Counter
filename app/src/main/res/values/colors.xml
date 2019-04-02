@@ -3,9 +3,12 @@
     <color name="colorPrimary">#00695c</color>
     <color name="colorPrimaryDark">#003d33</color>
     <color name="colorPrimaryLight">#439889</color>
-    <color name="colorAccent">#ffa000</color>
-    <color name="colorAccentLight">#ffd149</color>
-    <color name="colorAccentDark">#c67100</color>
+    <color name="colorAccent">#FFA000</color>
+    <color name="colorAccentLight">#FFD149</color>
+    <color name="colorAccentDark">#C67100</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="textColorSecondary">#000000</color>
+    <color name="ghg">#6B9B37</color>
+    <color name = "land">#5F4339</color>
+    <color name = "water">#0086C3</color>
 </resources>

@@ -18,6 +18,9 @@ public class DayLog {
     private String ghg;
     private String land;
     private String water;
+    private Double ghgVal;
+    private Double landVal;
+    private Double waterVal;
     private Double amtg;
     private Integer kCal;
     private Double p;
@@ -26,7 +29,7 @@ public class DayLog {
     @PrimaryKey(autoGenerate=true)
     private Integer id;
 
-    public DayLog(Integer currentDay, String foodName, String ghg, String land, String water, Double amtg, Integer kCal, Double p, Double carbs, Double fat){
+    public DayLog(Integer currentDay, String foodName, String ghg, String land, String water, Double amtg, Integer kCal, Double p, Double carbs, Double fat, Double ghgVal, Double landVal, Double waterVal){
         this.currentDay = currentDay;
         this.foodName = foodName;
         this.ghg = ghg;
@@ -37,6 +40,9 @@ public class DayLog {
         this.p = p;
         this.carbs = carbs;
         this.fat = fat;
+        this.ghgVal = ghgVal;
+        this.landVal = landVal;
+        this.waterVal = waterVal;
     }
 
     public Integer getCurrentDay(){
@@ -82,4 +88,10 @@ public class DayLog {
     public Double getCarbs(){return this.carbs;}
 
     public Double getFat(){return this.fat;}
+
+    public Double getGhgVal(){return this.ghgVal;}
+
+    public Double getLandVal(){return this.landVal;}
+
+    public Double getWaterVal(){return this.waterVal;}
 }

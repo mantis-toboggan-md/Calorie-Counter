@@ -2,6 +2,7 @@ package com.example.frontend.ui;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -144,21 +145,27 @@ public class SearchFood extends AppCompatActivity {
 
                 for(int i = 0; i < 25; i++){
                     try{
-                        view = layoutInflater.inflate(R.layout.food_result, parentLayout, false );
-                        LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.food_res_layout);
-                        view.findViewById(R.id.button_view_details).setTag(foodRes.getJSONObject(i).getString("ndbno")+foodRes.getJSONObject(i).getString("group").replaceAll(" ", "%20"));
-                        TextView foodName = (TextView)view.findViewById(R.id.text_food_name);
-                        TextView foodGroup = (TextView)view.findViewById(R.id.text_food_group);
-                        foodName.setText(foodRes.getJSONObject(i).getString("name"));
-                        foodGroup.setText(foodRes.getJSONObject(i).getString("group"));
-                        parentLayout.addView(view);
+                        if(foodRes!=null){
+                            view = layoutInflater.inflate(R.layout.food_result, parentLayout, false );
+                            LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.food_res_layout);
+                            view.findViewById(R.id.button_view_details).setTag(foodRes.getJSONObject(i).getString("ndbno")+foodRes.getJSONObject(i).getString("group").replaceAll(" ", "%20"));
+                            TextView foodName = (TextView)view.findViewById(R.id.text_food_name);
+                            TextView foodGroup = (TextView)view.findViewById(R.id.text_food_group);
+                            foodName.setText(foodRes.getJSONObject(i).getString("name"));
+                            foodGroup.setText(foodRes.getJSONObject(i).getString("group"));
+                            parentLayout.addView(view);
+                        } else {
+                            view = layoutInflater.inflate(R.layout.err_no_res, parentLayout,false);
+                            parentLayout.addView(view);
+                            i = 25;
+                        }
+
                     } catch(JSONException e){
                         Log.e("json", e.toString());
                     }
 
                 }
 
-                Log.i("json", foodRes.toString());
             }
 
         }

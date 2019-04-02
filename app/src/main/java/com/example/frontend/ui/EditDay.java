@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -104,7 +106,7 @@ public class EditDay extends AppCompatActivity {
                 TextView totalFatEl = findViewById(R.id.text_total_fat);
 
                 //display totals
-                totalkCalEl.setText(String.valueOf(Math.round(totalkCal) +" cal"));
+                totalkCalEl.setText(String.valueOf(Math.round(totalkCal)));
                 totalPEl.setText(String.valueOf(Math.round(totalP) +"g p"));
                 totalCarbsEl.setText(String.valueOf(Math.round(totalCarbs) +"g carbs"));
                 totalFatEl.setText(String.valueOf(Math.round(totalFat) +"g fat"));
@@ -136,13 +138,42 @@ public class EditDay extends AppCompatActivity {
 
                     foodNameEl.setText(log.getFoodName());
                     foodAmtEl.setText(String.valueOf(Math.round(log.getAmtg()))+"g");
-                    foodkCalEl.setText(String.valueOf(Math.round(log.getKCal()))+" cal");
+                    foodkCalEl.setText(String.valueOf(Math.round(log.getKCal())));
                     foodPEl.setText(String.valueOf(Math.round(log.getP()))+"g");
                     foodCarbEl.setText(String.valueOf(Math.round(log.getCarbs()))+"g");
                     foodFatEl.setText(String.valueOf(Math.round(log.getFat()))+"g");
-                    foodGhgEl.setText(String.format("%.3f",Double.valueOf(log.getGhg())));
-                    foodWaterEl.setText(String.format(String.format("%.3f",Double.valueOf(log.getWater()))));
-                    foodLandEl.setText(String.format("%.3f",Double.valueOf(log.getLand())));
+//                    foodGhgEl.setText(String.format("%.3f",Double.valueOf(log.getGhg())));
+//                    foodWaterEl.setText(String.format(String.format("%.3f",Double.valueOf(log.getWater()))));
+//                    foodLandEl.setText(String.format("%.3f",Double.valueOf(log.getLand())));
+                    foodGhgEl.setText(log.getGhg());
+                    foodWaterEl.setText(log.getWater());
+                    foodLandEl.setText(log.getLand());
+
+
+                    if(log.getLand() !=null){
+                        if(log.getLand().equals("poor")){
+                            foodLandEl.setTextAppearance(EditDay.this, R.style.badText);
+                        } else if(log.getLand().equals("fair")){
+                            foodLandEl.setTextAppearance(EditDay.this, R.style.fairText);
+                        } else {
+                            foodLandEl.setTextAppearance(EditDay.this, R.style.goodText);
+                        }
+                    }
+
+                    if(log.getGhg().equals("poor")){
+                        foodGhgEl.setTextAppearance(EditDay.this, R.style.badText);
+                    } else if(log.getGhg().equals("fair")){
+                        foodGhgEl.setTextAppearance(EditDay.this, R.style.fairText);
+                    } else {
+                        foodGhgEl.setTextAppearance(EditDay.this, R.style.goodText);
+                    }
+                    if(log.getWater().equals("poor")){
+                        foodWaterEl.setTextAppearance(EditDay.this, R.style.badText);
+                    } else if(log.getWater().equals("fair")){
+                        foodWaterEl.setTextAppearance(EditDay.this, R.style.fairText);
+                    } else {
+                        foodWaterEl.setTextAppearance(EditDay.this, R.style.goodText);
+                    }
 
                     //add foods' nutrients to totals
                     totalkCal += log.getKCal();
@@ -151,13 +182,13 @@ public class EditDay extends AppCompatActivity {
                     totalFat += log.getFat();
 
                     //display totals
-                    totalkCalEl.setText(String.valueOf(Math.round(totalkCal) +" cal"));
+                    totalkCalEl.setText(String.valueOf(Math.round(totalkCal)));
                     totalPEl.setText(String.valueOf(Math.round(totalP) +"g p"));
                     totalCarbsEl.setText(String.valueOf(Math.round(totalCarbs) +"g carbs"));
                     totalFatEl.setText(String.valueOf(Math.round(totalFat) +"g fat"));
 
                     //add event listener to fab
-                    FloatingActionButton fab = view.findViewById(R.id.fab_food_remove);
+                    ImageButton fab = view.findViewById(R.id.fab_food_remove);
                     fab.setOnClickListener(new FloatingActionButton.OnClickListener() {
                         @Override
                         public void onClick(View v) {

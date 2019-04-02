@@ -52,9 +52,9 @@ public class FoodDetail extends AppCompatActivity {
     String protein = null;
     String carbs = null;
     String fat = null;
-    Double ghg = null;
-    Double land = null;
-    Double water = null;
+    Double ghg = 0.0;
+    Double land = 0.0;
+    Double water = 0.0;
     String ghgRating = null;
     String landRating = null;
     String waterRating = null;
@@ -66,6 +66,8 @@ public class FoodDetail extends AppCompatActivity {
     Double carbsAdded;
 
     private DayLogViewModel mDayLogViewModel;
+
+    public static final int CAT_REQUEST = 1;
 
 
     @Override
@@ -81,15 +83,32 @@ public class FoodDetail extends AppCompatActivity {
         //query my api to get nutrient info and env info
         new myAPI().execute();
 
+    }
 
-       TextView foodNo = findViewById(R.id.text_dbno);
-       foodNo.setText(ndbno);
+    public void pickCategory(View view) {
+        Intent intent = new Intent(this, AddCategory.class );
+        startActivityForResult(intent, CAT_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode,
+                                 int resultCode, Intent data) {
+        if(requestCode == 1){
+            if(resultCode ==RESULT_OK){
+                String category = data.getStringExtra("category");
+                //get first 5 characters from ndbno
+                String number = ndbno.substring(0,5);
+                ndbno = number+category;
+                Log.i("ndbno", ndbno);
+                new myAPI().execute();
+            }
+        }
     }
 
     private class myAPI extends AsyncTask<Void,Void,String>{
         @Override
         protected String doInBackground(Void ...params){
-            String url = "http://10.0.2.2:8082/details/" + ndbno;
+            String url = "https://capback.herokuapp.com/details/" + ndbno;
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
             String foodDetails = null;
@@ -128,6 +147,7 @@ public class FoodDetail extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(String s){
+          TextView foodCatEl = findViewById(R.id.text_env_cat_value);
           TextView foodNameEl = findViewById(R.id.text_food_name);
           TextView foodServingEl = findViewById(R.id.text_common_measure);
           TextView kCalEl = findViewById(R.id.text_kcal_value);
@@ -146,6 +166,9 @@ public class FoodDetail extends AppCompatActivity {
                 JSONObject foodObject = foodObjectAll.getJSONObject("food");
                 JSONObject envObject = foodObjectAll.getJSONObject("envkCal");
                 JSONObject envRatingObject = foodObjectAll.getJSONObject("envRating");
+                String envCat = foodObjectAll.getString("envGroup");
+                foodCatEl.setText(envCat);
+
                 foodName = foodObject.getString("name");
                 foodServing = foodObject.getString("measure") + " (" + foodObject.getString("weight") + "g)";
                 kCal = foodObject.getJSONArray("nutrients").getJSONObject(0).getString("value");
@@ -153,7 +176,7 @@ public class FoodDetail extends AppCompatActivity {
                 carbs = foodObject.getJSONArray("nutrients").getJSONObject(2).getString("value");
                 fat = foodObject.getJSONArray("nutrients").getJSONObject(3).getString("value");
 
-                if(envObject.getString("land")!=null){
+                if(envObject!=null){
                     ghg = envObject.getDouble("ghg");
                     land = envObject.getDouble("land");
                     water = envObject.getDouble("water");
@@ -162,7 +185,7 @@ public class FoodDetail extends AppCompatActivity {
                     waterRating = envRatingObject.getString("water");
                 }
             } catch (JSONException e){
-                Log.i("json", e.toString() );
+                Log.e("json", e.toString() );
             }finally {
 
 
@@ -173,38 +196,45 @@ public class FoodDetail extends AppCompatActivity {
                 carbsEl.setText(carbs + "g");
                 fatEl.setText(fat + "g");
                 if(ghg != null){
-                    Spanned ghgText = Html.fromHtml(String.format("%.3f", ghg)+" grams CO<sub>2</sub>",Html.FROM_HTML_MODE_LEGACY);
+                    Spanned ghgText = Html.fromHtml(String.format("%.3f", ghg)+" grams CO<sub><small>2</small></sub>",Html.FROM_HTML_MODE_LEGACY);
                     ghgEl.setText(ghgText);
                     ghgRatingEl.setText(ghgRating );
                     if(ghgRating.equals("poor")){
                         ghgRatingEl.setTextAppearance(FoodDetail.this, R.style.badText);
                     } else if(ghgRating.equals("fair")){
                         ghgRatingEl.setTextAppearance(FoodDetail.this, R.style.fairText);
-                    } else {
+                    } else if(ghgRating.equals("good")){
                         ghgRatingEl.setTextAppearance(FoodDetail.this, R.style.goodText);
+                    } else {
+                        ghgRatingEl.setTextAppearance(R.style.faintText);
                     }
                 }
                 if(land != null){
-                    Spanned mText = Html.fromHtml(String.format("%.3f", land)+" m<sup>2</sup> /year",Html.FROM_HTML_MODE_LEGACY);
+                    Spanned mText = Html.fromHtml(String.format("%.3f", land)+" m<sup><small>2</small></sup> /year",Html.FROM_HTML_MODE_LEGACY);
                     landEl.setText(mText);
                     landRatingEl.setText(landRating);
                     if(landRating.equals("poor")){
                         landRatingEl.setTextAppearance(FoodDetail.this, R.style.badText);
                     } else if(landRating.equals("fair")){
                         landRatingEl.setTextAppearance(FoodDetail.this, R.style.fairText);
-                    } else {
+                    } else if(landRating.equals("good")){
                         landRatingEl.setTextAppearance(FoodDetail.this, R.style.goodText);
+                    } else {
+                        landRatingEl.setTextAppearance(R.style.faintText);
                     }
                 }
                 if(water != null){
-                    waterEl.setText(String.format("%.3f", water)  + " cubic meters");
+                    Spanned mText = Html.fromHtml(String.format("%.3f", water)+" m<sup><small>3<small></sup>",Html.FROM_HTML_MODE_LEGACY);
+                    waterEl.setText(mText);
                     waterRatingEl.setText(waterRating);
                     if(waterRating.equals("poor")){
                         waterRatingEl.setTextAppearance(FoodDetail.this, R.style.badText);
                     } else if(waterRating.equals("fair")){
                         waterRatingEl.setTextAppearance(FoodDetail.this, R.style.fairText);
-                    } else {
+                    } else if(waterRating.equals("good")){
                         waterRatingEl.setTextAppearance(FoodDetail.this, R.style.goodText);
+                    } else{
+                        waterRatingEl.setTextAppearance(R.style.faintText);
                     }
                 }
 
@@ -267,6 +297,10 @@ public class FoodDetail extends AppCompatActivity {
 
         //calculate nutrients of amount to log
         kCalAdded = (int)Math.round(amtg * caloriePerGram);
+        //calculate env variables in amount to log
+        Double ghgAdded = kCalAdded * ghg/100;
+        Double landAdded = kCalAdded * land/100;
+        Double waterAdded = kCalAdded * water/100;
 
         Log.i("where", "database opening...");
         //get db access
@@ -277,7 +311,7 @@ public class FoodDetail extends AppCompatActivity {
 
         Log.i("where", currentDay.toString());
         //add food to db
-        mDayLogViewModel.insert(new DayLog(currentDay, foodName, String.valueOf(ghg), String.valueOf(land), String.valueOf(water), amtg, kCalAdded, pAdded, carbsAdded, fatAdded));
+        mDayLogViewModel.insert(new DayLog(currentDay, foodName, ghgRating, landRating, waterRating, amtg, kCalAdded, pAdded, carbsAdded, fatAdded, ghgAdded, landAdded, waterAdded ));
         Log.i("where", "food added to db");
         //close this screen, return to search
         finish();

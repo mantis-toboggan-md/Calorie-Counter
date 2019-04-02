@@ -8,8 +8,19 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">#FFFFFF</item>
+        <item name="colorControlNormal">#FFFFFF</item>
+        <item name="android:colorControlNormal">#FFFFFF</item></style>
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+    </style>
+
+
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -17,7 +28,9 @@
         <item name="android:colorActivatedHighlight">@color/colorAccentLight</item>
         <item name="android:textColorPrimary">@color/textColorSecondary</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationStyle</item>
     </style>
+
 
     <style name="badText">
         <item name="android:textColor">@android:color/holo_red_dark</item>
@@ -30,5 +43,16 @@
     <style name="goodText">
         <item name="android:textColor">@android:color/holo_green_dark</item>
     </style>
+
+    <style name="faintText">
+        <item name="android:textColor">@android:color/tertiary_text_light</item>
+    </style>
+
+
+    <style name="WindowAnimationStyle">
+        <item name="android:windowEnterAnimation">@null</item>
+        <item name="android:windowExitAnimation">@null</item>
+    </style>
+]
 
 </resources>
